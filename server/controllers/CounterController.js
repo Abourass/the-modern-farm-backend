@@ -9,7 +9,7 @@ class CounterController {
     return await counter.save();
   }
   async increaseCounter(id, amount){
-    let counter = await Counter.findById(id);
+    let counter = await Counter.findOne({_id: id});
     if (!counter){counter = await this.createCounter(id, 0)}
     counter["sequence_value"] += amount;
     return await counter.save();

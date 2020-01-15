@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
 // Create Schema
-const CountersSchema = new Schema({
+const CounterSchema = new mongoose.Schema({
   _id: {
     type: String,
   },
@@ -12,4 +11,4 @@ const CountersSchema = new Schema({
 });
 
 // Create collection and add Schema
-mongoose.model('counters', CountersSchema);
+module.exports = mongoose.model('counters', CounterSchema);
