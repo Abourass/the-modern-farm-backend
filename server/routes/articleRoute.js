@@ -8,5 +8,6 @@ router.post('/all', async(ctx, next) => ArticleController.findAll(ctx));
 router.post('/:articleNumber', async(ctx) => ArticleController.findByArticleNumber(ctx));
 
 router.get('/create', async(ctx) => ArticleController.write(ctx));
+router.get('/edit/:articleNumber', async(ctx) => ArticleController.edit(ctx));
 router.post('/delete/:articleNumber', async(ctx) => ArticleController.delete(ctx));
 module.exports = router;
