@@ -13,7 +13,7 @@ class ArticleController{
       ctx.throw(500);
     }
   }
-  async create(ctx){
+  async new(ctx){
     try {
       const articleThatAlreadyExist = await Article.findOne({title: ctx.request.body.title});
       if (articleThatAlreadyExist){ ctx.body = {Message: 'That article already exist'} }
@@ -34,7 +34,20 @@ class ArticleController{
       ctx.throw(500);
     }
   }
-  async write(ctx){
+  async update(ctx){
+    try {
+      const article = await Article.findOne({number: ctx.params.articleNumber});
+      article.title = ctx.request.body.title;
+      article.content = ctx.request.body.content;
+      article.author = ctx.request.body.author;
+      const savedArticle = await article.save();
+      ctx.body = savedArticle
+    } catch (err) {
+      if (err.name === 'CastError' || err.name === 'NotFoundError') { ctx.throw(404); }
+      ctx.throw(500);
+    }
+  }
+  async create(ctx){
     ctx.body = `
 <!DOCTYPE html>
 <html lang="en">
@@ -117,14 +130,14 @@ class ArticleController{
         </div>
       </div>
     </section>
-    <form action="/article/new" method="post">
+    <form action="/article/update/${article.number}" method="post">
       <section class="section">
         <div class="columns">
           <div class="column">
             <div class="field">
               <label class="label">Title</label>
               <div class="control">
-                <input class="input" type="text" name="title" placeholder="Title">
+                <input class="input" type="text" name="title" placeholder="Title" value="${article.title}">
               </div>
             </div>  
           </div>
@@ -132,7 +145,7 @@ class ArticleController{
             <div class="field">
               <label class="label">Author</label>
               <div class="control">
-                <input class="input" type="text" name="author" placeholder="Author">
+                <input class="input" type="text" name="author" placeholder="Author" value="${article.author}">
               </div>
             </div>  
           </div>
