@@ -10,19 +10,19 @@ class UserController {
       return this.reloadRegisterPage(ctx);
     }
 
-    let hashedPass;
     bcrypt.genSalt(10, (err, salt) => {
-      bcrypt.hash(ctx.request.body.password, salt, (err, hash) => { hashedPass = hash; });
+      bcrypt.hash(ctx.request.body.password, salt, async(err, hash) => {
+        const user = new User({
+          username: ctx.request.body.username,
+          displayName: ctx.request.body.displayName,
+          email: ctx.request.body.email,
+          password: hash,
+        });
+        const savedUser = await user.save();
+        ctx.body = savedUser;
+      });
     });
 
-    const user = new User({
-      username: ctx.request.body.username,
-      displayName: ctx.request.body.displayName,
-      email: ctx.request.body.email,
-      password: hashedPass
-    });
-    const savedUser = await user.save();
-    ctx.body = savedUser;
   }
   async registerPage(ctx){
     ctx.body = `
