@@ -19,7 +19,7 @@ class UserController {
           password: hash,
         });
         const savedUser = await user.save();
-        ctx.body = savedUser;
+        ctx.body = await savedUser;
       });
     });
 
@@ -172,6 +172,58 @@ class UserController {
           <button class="button is-link" type="submit">Submit</button>
         </div>
       </div>
+    </form>
+      <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    </body>
+   </html>
+    `
+  }
+  async loginPage(ctx){
+    ctx.body = `
+    <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Register User</title>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    </head>
+    <body>
+      <section class="hero is-dark">
+        <div class="hero-body">
+          <div class="container">
+            <h1 class="title">
+              Register User
+            </h1>
+          </div>
+        </div>
+      </section>
+    <form action="/user/login" method="post">
+    <section class="section">
+      <div class="field is-horizontal">
+        <div class="field-label is-normal">
+          <label class="label">Login</label>
+        </div>
+        <div class="field-body">
+          <div class="field">
+            <p class="control is-expanded">
+              <input class="input" type="text" placeholder="Username" name="username">
+            </p>
+          </div>
+          <div class="field">
+            <p class="control is-expanded">
+              <input class="input" type="password" placeholder="Password" name="password">
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="field is-grouped">
+        <div class="control">
+          <button class="button is-link" type="submit">Submit</button>
+        </div>
+      </div>
+      </section>
     </form>
       <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     </body>
