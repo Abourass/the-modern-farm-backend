@@ -48,6 +48,13 @@ class ArticleController{
     }
   }
   async create(ctx){
+    try {
+      const articles = await Article.find();
+      const articleNavCreate = (articles) => {
+        let html = '';
+        articles.forEach(article => html += `<a class="navbar-item" href="/article/edit/${article.number}"> ${article.title} </a>`)
+        return html
+      };
     ctx.body = `
 <!DOCTYPE html>
 <html lang="en">
@@ -67,6 +74,47 @@ class ArticleController{
         </div>
       </div>
     </section>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="modernNav">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+       </div>
+    
+      <div id="modernNav" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="https://the-modern-farm.now.sh/">
+            Home
+          </a>
+    
+          <a class="navbar-item" href="/article/create">
+            Create Article
+          </a>
+    
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              Articles
+            </a>
+    
+            <div class="navbar-dropdown">
+              ${articleNavCreate(articles)}
+            </div>
+          </div>
+        </div>
+    
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="buttons">
+              <a class="button is-light" href="/user/logout">
+                Log out
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
     <form action="/article/new" method="post">
       <section class="section">
         <div class="columns">
@@ -82,7 +130,7 @@ class ArticleController{
             <div class="field">
               <label class="label">Author</label>
               <div class="control">
-                <input class="input" type="text" name="author" placeholder="Author">
+                <input class="input" type="text" name="author" placeholder="Author" value="${ctx.state.user.displayName}">
               </div>
             </div>  
           </div>
@@ -107,10 +155,20 @@ class ArticleController{
     </body>
     </html>
     `
+    } catch (err) {
+      if (err.name === 'CastError' || err.name === 'NotFoundError') { ctx.throw(404); }
+      ctx.throw(500);
+    }
   }
   async edit(ctx){
     try {
       const article = await Article.findOne({number: ctx.params.articleNumber});
+      const articles = await Article.find();
+      const articleNavCreate = (articles) => {
+        let html = '';
+        articles.forEach(article => html += `<a class="navbar-item" href="/article/edit/${article.number}"> ${article.title} </a>`)
+        return html
+      };
       ctx.body = `
 <!DOCTYPE html>
 <html lang="en">
@@ -130,6 +188,47 @@ class ArticleController{
         </div>
       </div>
     </section>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="modernNav">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+       </div>
+    
+      <div id="modernNav" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="https://the-modern-farm.now.sh/">
+            Home
+          </a>
+    
+          <a class="navbar-item" href="/article/create">
+            Create Article
+          </a>
+    
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              Articles
+            </a>
+    
+            <div class="navbar-dropdown">
+              ${articleNavCreate(articles)}
+            </div>
+          </div>
+        </div>
+    
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="buttons">
+              <a class="button is-light" href="/user/logout">
+                Log out
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
     <form action="/article/update/${article.number}" method="post">
       <section class="section">
         <div class="columns">
