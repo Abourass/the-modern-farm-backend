@@ -6,13 +6,8 @@ router.get('/', async(ctx, next) => { ctx.body = {article: {title: 'This is a ti
 router.post('/all', async(ctx, next) => ArticleController.findAll(ctx));
 router.post('/:articleNumber', async(ctx) => ArticleController.findByArticleNumber(ctx));
 
-router.post('/new', async(ctx, next) => {
-  if (ctx.isAuthenticated()){
-    await ArticleController.new(ctx)
-  } else {
-    ctx.redirect('/user/login')
-  }
-});
+router.post('/new', async(ctx, next) => await ArticleController.new(ctx));
+
 router.post('/update/:articleNumber', async(ctx) => {
   if (ctx.isAuthenticated()){
     await ArticleController.update(ctx)
